@@ -15,7 +15,13 @@ const ProductList = React.createClass({
     this.setState({ products: products })
   },
   handleProductUpVote: function (productId) {
-    console.log(productId + " was upvoted.")
+    Data.forEach(el => {
+      if (el.id === productId) {
+        el.votes = el.votes + 1
+        return
+      }
+    })
+    this.updateState()
   },
   render: function () {
     const products = this.state.products.map(product => {
@@ -55,6 +61,7 @@ const Product = React.createClass({
           <div className='header'>
             <a onClick={this.handleUpVote}>
               <i className='large caret up icon'></i>
+              <i className='large caret down icon'></i>
             </a>
             {this.props.votes}
             </div>
