@@ -9,18 +9,15 @@ const ProductList = React.createClass({
   componentDidMount: function () {
     this.updateState()
   },
+  directions: {
+    "+": (a, b) => a - b,
+    "-": (a, b) => b - a
+  },
   updateState: function () {
-    const directions = {
-      "+": (a, b) => a - b,
-      "-": (a, b) => b - a
-    }
     const products = Data.sort((a, b) => {
-      return directions[this.state.direction](a.votes, b.votes)
+      return this.directions[this.state.direction](a.votes, b.votes)
     })
     this.setState({ products: products })
-  },
-  updateSortDirection: function (direction) {
-    this.setState({ direction: direction })
   },
   handleProductUpVote: function (productId) {
     Data.forEach(el => {
@@ -41,12 +38,16 @@ const ProductList = React.createClass({
     this.updateState()
   },
   handleSortUp: function () {
-    this.setState({ direction: "+" })
-    this.updateState()
+    const products = Data.sort((a, b) => {
+      return this.directions["+"](a.votes, b.votes)
+    })
+    this.setState({ products: products, direction: "+"})
   },
   handleSortDown: function () {
-    this.setState({ direction: "-" })
-    this.updateState()
+    const products = Data.sort((a, b) => {
+      return this.directions["-"](a.votes, b.votes)
+    })
+    this.setState({ products: products, direction: "-"})
   },
   render: function () {
     const products = this.state.products.map(product => {
@@ -74,7 +75,7 @@ const ProductList = React.createClass({
         <a onClick={this.handleSortDown}>
           <i className='large caret down icon'></i>
         </a>
-      <span><b>Sort products</b></span>
+      <span><b>Sort</b></span>
       </div>
       <div className='ui items'>
       {products}
