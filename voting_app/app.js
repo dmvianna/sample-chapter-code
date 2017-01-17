@@ -2,17 +2,25 @@
 const ProductList = React.createClass({
   getInitialState: function () {
     return {
-      products: []
+      products: [],
+      direction: "-"
     }
   },
   componentDidMount: function () {
     this.updateState()
   },
   updateState: function () {
+    const directions = {
+      "+": (a, b) => a - b,
+      "-": (a, b) => b - a
+    }
     const products = Data.sort((a, b) => {
-      return b.votes - a.votes
+      return directions[this.state.direction](a.votes, b.votes)
     })
     this.setState({ products: products })
+  },
+  updateSortDirection: function (direction) {
+    this.setState({ direction: direction })
   },
   handleProductUpVote: function (productId) {
     Data.forEach(el => {
@@ -32,26 +40,44 @@ const ProductList = React.createClass({
     })
     this.updateState()
   },
+  handleSortUp: function () {
+    this.setState({ direction: "+" })
+    this.updateState()
+  },
+  handleSortDown: function () {
+    this.setState({ direction: "-" })
+    this.updateState()
+  },
   render: function () {
     const products = this.state.products.map(product => {
-    return (
-      <Product
-        key={'product-' + product.id}
-        id={product.id}
-        title={product.title}
-        description={product.description}
-        url={product.url}
-        votes={product.votes}
-        submitter_avatar_url={product.submitter_avatar_url}
-        product_image_url={product.product_image_url}
-        onUpVote={this.handleProductUpVote}
-        onDownVote={this.handleProductDownVote}
-      />
-    )
+      return (
+        <Product
+          key={'product-' + product.id}
+          id={product.id}
+          title={product.title}
+          description={product.description}
+          url={product.url}
+          votes={product.votes}
+          submitter_avatar_url={product.submitter_avatar_url}
+          product_image_url={product.product_image_url}
+          onUpVote={this.handleProductUpVote}
+          onDownVote={this.handleProductDownVote}
+        />
+      )
     })
     return (
+      <div>
+      <div className='header'>
+        <a onClick={this.handleSortUp}>
+          <i className='large caret up icon'></i>
+        </a>
+        <a onClick={this.handleSortDown}>
+          <i className='large caret down icon'></i>
+        </a>
+      </div>
       <div className='ui items'>
-        {products}
+      {products}
+      </div>
       </div>
     )
   }
