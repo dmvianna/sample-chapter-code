@@ -10,8 +10,8 @@ const ProductList = React.createClass({
     this.updateState()
   },
   directions: {
-    "+": (a, b) => a - b,
-    "-": (a, b) => b - a
+    "-": (a, b) => a - b,
+    "+": (a, b) => b - a
   },
   updateState: function () {
     const products = Data.sort((a, b) => {
