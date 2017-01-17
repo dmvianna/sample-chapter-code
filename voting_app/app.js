@@ -74,6 +74,7 @@ const ProductList = React.createClass({
         <a onClick={this.handleSortDown}>
           <i className='large caret down icon'></i>
         </a>
+      <span><b>Sort products</b></span>
       </div>
       <div className='ui items'>
       {products}
